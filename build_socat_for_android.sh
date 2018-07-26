@@ -89,7 +89,7 @@ STRIP="$TCDIR/bin/$HOST-strip"
 # LIBS="-static"
 
 CFLAGS="-fPIE -fPIC"
-# CFLAGS="-fPIE -fPIC -fno-debug-info-for-profiling -fno-debug-macro"
+# CFLAGS="-fPIE -fPIC -static -fno-debug-info-for-profiling -fno-debug-macro"
 [[ "$OP4" = 'verbose' ]] && CFLAGS="$CFLAGS -v"
 
 LDFLAGS="-fPIE -pie"
@@ -114,7 +114,7 @@ export AR="$AR"
 rm -rf $TCDIR
 V=''
 [[ "$OP4" = 'verbose' ]] && V="-v"
-make_standalone_toolchain.py ${V} --arch $ARCH --api $SDKV --install-dir $TCDIR --force
+make_standalone_toolchain.py $V --arch $ARCH --api $SDKV --install-dir $TCDIR --force
 
 # Create configure script
 cd ${ROOT}
@@ -229,7 +229,7 @@ _handle_bin(){
   if [ -e "${BUILD}/${1}" ]
     then
       mkdir -p ${ROOT}/binaries/${ARCH}/${SDKV}
-      cp ${BUILD}/socat ${ROOT}/binaries/${ARCH}/${SDKV}/${1}
+      cp ${BUILD}/${1} ${ROOT}/binaries/${ARCH}/${SDKV}/${1}
       [[ "$OP5" = 'strip' ]] && $STRIP ${ROOT}/binaries/${ARCH}/${SDKV}/${1}
 
       _say "Build finished, ${1} has been generated successfuly in ${ROOT}/binaries/$ARCH/$SDKV/${1}"
